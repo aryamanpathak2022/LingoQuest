@@ -5,6 +5,9 @@ import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+// import bg.css
+
+import styles from './bg.css';
 
 export function PixelatedAuth() {
   const [isLogin, setIsLogin] = useState(true)
