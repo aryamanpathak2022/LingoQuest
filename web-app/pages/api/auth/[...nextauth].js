@@ -45,11 +45,13 @@ export default NextAuth({
   callbacks: {
     async session({ session, token }) {
       session.user.id = token.id;
+      session.user.sub = token.sub;
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        console.log(token);
       }
       return token;
     },
