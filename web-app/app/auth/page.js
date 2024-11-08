@@ -1,10 +1,13 @@
-import { PixelatedAuth } from "@/components/pixelated-auth";
+'use client'
 
+import { PixelatedAuth } from "@/components/pixelated-auth";
+import { SessionProvider } from "next-auth/react";
 export default function Home() {
   return (
-    <div>
-      <PixelatedAuth />
-    </div>
-   
+    <SessionProvider>
+      <div>
+        <PixelatedAuth />
+      </div>
+    </SessionProvider>
   );
 }

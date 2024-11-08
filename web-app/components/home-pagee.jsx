@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
 import styles from './bg.css';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 
 export function HomePage() {
@@ -57,7 +58,7 @@ export function HomePage() {
           <nav>
             <Button
               asChild
-              className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-none">
+              className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-none" onClick={() => signIn()}>
               <Link href="/login">Login / Signup</Link>
             </Button>
           </nav>
