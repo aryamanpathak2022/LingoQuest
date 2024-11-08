@@ -1,10 +1,12 @@
-'use client';
+'use client'
+
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from 'next/link'
 
-export default function Dashboard() {
+export default function Component() {
   const [currentStreak, setCurrentStreak] = useState(7)
   const [quizData, setQuizData] = useState([])
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
@@ -28,8 +30,7 @@ export default function Dashboard() {
 
   const renderQuizGrid = () => {
     return (
-      (<div
-        className="grid grid-cols-[repeat(auto-fill,minmax(14px,1fr))] gap-1 border-l-4 border-green-500 pl-2">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(14px,1fr))] gap-1 border-l-4 border-green-500 pl-2">
         {quizData.map((day, index) => (
           <div
             key={index}
@@ -40,14 +41,15 @@ export default function Dashboard() {
               day.count === 3 ? 'bg-green-500' :
               'bg-green-300'
             }`}
-            title={`${day.count} quizzes on ${day.date.toDateString()}`} />
+            title={`${day.count} quizzes on ${day.date.toDateString()}`}
+          />
         ))}
-      </div>)
-    );
+      </div>
+    )
   }
 
   return (
-    (<div className="min-h-screen bg-black text-green-500 font-pixel">
+    <div className="min-h-screen bg-black text-green-500 font-pixel">
       <style jsx global>{`
         @font-face {
           font-family: 'PixelFont';
@@ -57,20 +59,20 @@ export default function Dashboard() {
           font-family: 'PixelFont', monospace;
         }
       `}</style>
+
       {/* Header */}
       <header className="p-4 border-b-4 border-green-500">
         <div className="container mx-auto flex justify-between items-center">
           <div className="text-2xl font-bold">LingoQuest</div>
           <nav className="flex items-center space-x-4">
             <span className="text-yellow-500">Welcome, Player1</span>
-            <Button
-              asChild
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-none">
+            <Button asChild className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-none">
               <Link href="/logout">Logout</Link>
             </Button>
           </nav>
         </div>
       </header>
+
       <div className="container mx-auto mt-8 flex">
         {/* Main Content */}
         <main className="flex-grow pr-8">
@@ -108,7 +110,8 @@ export default function Dashboard() {
                     key={index}
                     className={`inline-block w-4 h-4 mr-1 ${
                       index < currentStreak ? 'bg-yellow-500' : 'bg-gray-700'
-                    }`}></span>
+                    }`}
+                  ></span>
                 ))}
               </div>
             </div>
@@ -120,7 +123,8 @@ export default function Dashboard() {
               <h2 className="text-xl font-bold">Quiz Activity</h2>
               <Select
                 value={selectedYear.toString()}
-                onValueChange={(value) => setSelectedYear(parseInt(value))}>
+                onValueChange={(value) => setSelectedYear(parseInt(value))}
+              >
                 <SelectTrigger className="w-[180px] bg-green-500 text-black rounded-none">
                   <SelectValue placeholder="Select Year" />
                 </SelectTrigger>
@@ -149,29 +153,23 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold mt-8 mb-4">Quick Actions</h2>
           <ul className="space-y-2">
             <li>
-              <Button
-                asChild
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-none">
+              <Button asChild className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-none">
                 <Link href="/daily-challenge">Daily Challenge</Link>
               </Button>
             </li>
             <li>
-              <Button
-                asChild
-                className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-none">
+              <Button asChild className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-none">
                 <Link href="/practice">Practice</Link>
               </Button>
             </li>
             <li>
-              <Button
-                asChild
-                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-none">
+              <Button asChild className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-none">
                 <Link href="/leaderboard">Leaderboard</Link>
               </Button>
             </li>
           </ul>
         </aside>
       </div>
-    </div>)
-  );
+    </div>
+  )
 }

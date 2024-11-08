@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-// import bg.css
+import { Github, Chrome } from 'lucide-react'
 
 import styles from './bg.css';
 
@@ -58,7 +58,7 @@ export function PixelatedAuth() {
         <div
           className="bg-gray-900 rounded-lg shadow-xl overflow-hidden border-4 border-green-500"
           style={{ fontFamily: 'PixelFont, monospace' }}>
-          <div className="p-8">
+          <div className="p-8 bg-gray-900">
             <div className="flex justify-center mb-8">
               <motion.div
                 animate={{ rotate: 360 }}
@@ -131,18 +131,14 @@ export function PixelatedAuth() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-none border-2 border-green-500">
-                  <div
-                    className="w-4 h-4 bg-green-500"
-                    style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%)' }}></div>
+                  className="rounded-none border-2 border-green-500 bg-green-500 hover:text-black transition-colors duration-300">
+                  <Github className="w-4 h-4 bg " />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-none border-2 border-green-500">
-                  <div
-                    className="w-4 h-4 bg-green-500"
-                    style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 70%, 30% 70%, 30% 30%, 0 30%)' }}></div>
+                  className="rounded-none border-2 border-green-500 bg-green-500 hover:text-black transition-colors duration-300">
+                  <Chrome className="w-4 h-4" />
                 </Button>
               </div>
             </div>
