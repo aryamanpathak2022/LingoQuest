@@ -5,11 +5,8 @@ import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-<<<<<<< HEAD
 import { Github, Chrome } from 'lucide-react'
-=======
 import { signIn, signOut, useSession } from 'next-auth/react' // Import NextAuth functions
->>>>>>> 26fd295ac33cefcc50b3ba75aa7e30b39dbd2b4b
 
 import styles from './bg.css';
 
@@ -110,12 +107,7 @@ export function PixelatedAuth() {
         <div
           className="bg-gray-900 rounded-lg shadow-xl overflow-hidden border-4 border-green-500"
           style={{ fontFamily: 'PixelFont, monospace' }}>
-<<<<<<< HEAD
           <div className="p-8 bg-gray-900">
-=======
-
-          <div className="p-8">
->>>>>>> 26fd295ac33cefcc50b3ba75aa7e30b39dbd2b4b
             <div className="flex justify-center mb-8">
               <motion.div
                 animate={{ rotate: 360 }}

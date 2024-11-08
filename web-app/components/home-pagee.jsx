@@ -58,13 +58,8 @@ export function HomePage() {
           <nav>
             <Button
               asChild
-<<<<<<< HEAD
               className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-none">
               <Link href="/auth">Login / Signup</Link>
-=======
-              className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-none" onClick={() => signIn()}>
-              <Link href="/login">Login / Signup</Link>
->>>>>>> 26fd295ac33cefcc50b3ba75aa7e30b39dbd2b4b
             </Button>
           </nav>
         </div>
