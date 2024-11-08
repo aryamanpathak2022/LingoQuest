@@ -23,7 +23,7 @@ export function HomePage() {
     { id: 1, title: 'Beginner Vocabulary', difficulty: 'Easy' },
     { id: 2, title: 'Intermediate Grammar', difficulty: 'Medium' },
     { id: 3, title: 'Advanced Conversation', difficulty: 'Hard' },
-    { id: 4, title: 'Idioms and Phrases', difficulty: 'Medium' },
+    { id: 4, title: 'Idioms and Phrases', difficulty: 'Advance' },
   ]
 
   const blogs = [

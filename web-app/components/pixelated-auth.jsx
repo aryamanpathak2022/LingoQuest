@@ -5,13 +5,23 @@ import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+<<<<<<< HEAD
 import { Github, Chrome } from 'lucide-react'
+=======
+import { signIn, signOut, useSession } from 'next-auth/react' // Import NextAuth functions
+>>>>>>> 26fd295ac33cefcc50b3ba75aa7e30b39dbd2b4b
 
 import styles from './bg.css';
 
 export function PixelatedAuth() {
   const [isLogin, setIsLogin] = useState(true)
   const [pixels, setPixels] = useState([])
+  const { data: session, status } = useSession()  // Get the session and status
+  
+  // Add state for email, password, and name (for sign-up)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('') // For Sign Up: Store name input
 
   useEffect(() => {
     const newPixels = []
@@ -28,9 +38,51 @@ export function PixelatedAuth() {
     setPixels(newPixels)
   }, [])
 
+  if (status === 'loading') {
+    return <div>Loading...</div> // Optionally, show a loading state while session is being fetched
+  }
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+
+    // Sign in using NextAuth with credentials
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,  // Do not redirect automatically
+      callbackUrl: "/dashboard",  // Redirect to /dashboard after successful login
+    })
+
+    if (res?.error) {
+      console.error("Login failed:", res.error)
+    } else if (res?.url) {
+      window.location.href = res.url  // Redirect manually after successful sign-in
+    }
+  }
+
+  const handleSignUp = async (e) => {
+    e.preventDefault()
+
+    // Perform sign-up logic here if needed (e.g., calling an API to register the user)
+    console.log("Sign-up with", { email, password, name })
+
+    // After successful sign-up, you might want to sign them in immediately
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+      callbackUrl: "/dashboard", // Redirect to /dashboard after sign-up
+    })
+
+    if (res?.error) {
+      console.error("Sign-up failed:", res.error)
+    } else if (res?.url) {
+      window.location.href = res.url  // Redirect after successful sign-up
+    }
+  }
+
   return (
-    (<div
-      className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
       {pixels}
       <style jsx>{`
         @font-face {
@@ -58,7 +110,12 @@ export function PixelatedAuth() {
         <div
           className="bg-gray-900 rounded-lg shadow-xl overflow-hidden border-4 border-green-500"
           style={{ fontFamily: 'PixelFont, monospace' }}>
+<<<<<<< HEAD
           <div className="p-8 bg-gray-900">
+=======
+
+          <div className="p-8">
+>>>>>>> 26fd295ac33cefcc50b3ba75aa7e30b39dbd2b4b
             <div className="flex justify-center mb-8">
               <motion.div
                 animate={{ rotate: 360 }}
@@ -70,24 +127,39 @@ export function PixelatedAuth() {
                 <div className="absolute inset-8 bg-green-500"></div>
               </motion.div>
             </div>
+
             <h2 className="text-3xl font-bold text-center text-green-500 mb-8 pixelated">
               LingoQuest
             </h2>
-            <div className="flex justify-center space-x-4 mb-8">
-              <Button
-                variant={isLogin ? "default" : "outline"}
-                onClick={() => setIsLogin(true)}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-none">
-                Login
-              </Button>
-              <Button
-                variant={!isLogin ? "default" : "outline"}
-                onClick={() => setIsLogin(false)}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-none">
-                Sign Up
-              </Button>
-            </div>
-            <form>
+
+            {!session ? (
+              // Render login/signup if user is not logged in
+              <div className="flex justify-center space-x-4 mb-8">
+                <Button
+                  variant={isLogin ? "default" : "outline"}
+                  onClick={() => setIsLogin(true)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-none">
+                  Login
+                </Button>
+                <Button
+                  variant={!isLogin ? "default" : "outline"}
+                  onClick={() => setIsLogin(false)}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-none">
+                  Sign Up
+                </Button>
+              </div>
+            ) : (
+              // Show logged-in state
+              <div className="flex justify-center space-x-4 mb-8">
+                <Button
+                  onClick={() => signOut()}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-none">
+                  Sign Out
+                </Button>
+              </div>
+            )}
+
+            <form onSubmit={isLogin ? handleLogin : handleSignUp}>
               {!isLogin && (
                 <div className="mb-4">
                   <Label htmlFor="name" className="block text-sm font-medium text-green-500">
@@ -97,6 +169,8 @@ export function PixelatedAuth() {
                     type="text"
                     id="name"
                     placeholder="Enter your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)} // Handle input change
                     className="mt-1 bg-black text-green-500 border-2 border-green-500 rounded-none" />
                 </div>
               )}
@@ -107,6 +181,8 @@ export function PixelatedAuth() {
                 <Input
                   type="email"
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} // Handle email input change
                   placeholder="Enter your email"
                   className="mt-1 bg-black text-green-500 border-2 border-green-500 rounded-none" />
               </div>
@@ -117,10 +193,13 @@ export function PixelatedAuth() {
                 <Input
                   type="password"
                   id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)} // Handle password input change
                   placeholder="Enter your password"
                   className="mt-1 bg-black text-green-500 border-2 border-green-500 rounded-none" />
               </div>
               <Button
+                type="submit"
                 className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-none transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
                 {isLogin ? "Start Game" : "Create Character"}
               </Button>
@@ -143,8 +222,8 @@ export function PixelatedAuth() {
               </div>
             </div>
           </div>
-          <div
-            className="px-8 py-6 bg-gray-800 border-t-4 border-green-500 flex items-center justify-between">
+
+          <div className="px-8 py-6 bg-gray-800 border-t-4 border-green-500 flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 bg-blue-500"></div>
               <span className="text-sm text-blue-500">10+ languages</span>
@@ -155,22 +234,15 @@ export function PixelatedAuth() {
             </div>
           </div>
         </div>
+
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="mt-8 text-center">
-          <div
-            className="inline-block w-24 h-24 bg-yellow-500 rounded-none relative overflow-hidden">
-            <div className="absolute top-4 left-4 w-4 h-4 bg-black rounded-full"></div>
-            <div className="absolute top-4 right-4 w-4 h-4 bg-black rounded-full"></div>
-            <div className="absolute bottom-8 left-8 w-8 h-4 bg-black rounded-full"></div>
-          </div>
-          <p className="mt-4 text-green-500 text-lg font-semibold pixelated">
-            Level up your language skills!
-          </p>
+          transition={{ delay: 0.5, duration: 0.3 }}
+          className="flex justify-center mt-4 text-xs text-green-500">
+          <p>Developed by LingoQuest Labs</p>
         </motion.div>
       </motion.div>
-    </div>)
-  );
+    </div>
+  )
 }
