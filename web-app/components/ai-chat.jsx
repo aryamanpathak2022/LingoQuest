@@ -18,14 +18,13 @@ export function AiChat() {
   };
 
   useEffect(() => {
-    // Fetch chat history on component mount
     const fetchHistory = async () => {
       try {
         const response = await fetch('http://localhost:3000/api/chat/old');
         if (response.ok) {
           const history = await response.json();
-          console.log(history.message);
-          setMessages(history.message);
+          const updatedMessages = history.message.slice(1); // Remove the first message
+          setMessages(updatedMessages);
         } else {
           console.error('Failed to fetch chat history');
         }
@@ -33,33 +32,33 @@ export function AiChat() {
         console.error('Error fetching chat history:', error);
       }
     };
-
+  
     fetchHistory();
   }, []);
+  
 
   useEffect(scrollToBottom, [messages]);
 
   const handleSend = async () => {
     if (input.trim() === '') return;
-
-    const newMessage = { id: messages.length + 1, text: input, sender: 'user' };
-    setMessages(prev => [...prev, newMessage]);
+  
+    const newMessage = ['user', input];
+    setMessages((prev) => [...prev, newMessage]);
     setInput('');
     setIsTyping(true);
-
+  
     try {
-      // Send user message to the API and get AI response
       const response = await fetch('http://localhost:3000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input })
       });
-
+  
       if (response.ok) {
         const aiResponse = await response.json();
-        setMessages(prev => [
+        setMessages((prev) => [
           ...prev,
-          { id: messages.length + 2, text: aiResponse.reply, sender: 'ai' }
+          ['ai', aiResponse.reply]
         ]);
       } else {
         console.error('Failed to fetch AI response');
@@ -70,7 +69,7 @@ export function AiChat() {
       setIsTyping(false);
     }
   };
-
+  
   return (
     <div className="min-h-screen bg-black text-green-500 font-pixel p-4 relative overflow-hidden">
       <style jsx global>{`
@@ -89,7 +88,6 @@ export function AiChat() {
         }
       `}</style>
       
-      {/* Floating pixels */}
       {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
@@ -127,31 +125,31 @@ export function AiChat() {
         <Card className="bg-gray-900 border-green-500 border-4 mb-4 relative">
           <CardContent className="p-4 chat-container h-[60vh] overflow-y-auto">
             <AnimatePresence>
-              {messages.map((message) => (
+              {messages.map((message, index) => (
                 <motion.div
-                  key={message.id}
+                  key={index}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -50 }}
                   transition={{ duration: 0.5 }}
-                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
+                  className={`flex ${message[0] === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
                 >
-                  <div className={`flex items-start ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div className={`flex items-start ${message[0] === 'user' ? 'flex-row-reverse' : ''}`}>
                     <motion.div
-                      className={`w-8 h-8 rounded-none flex items-center justify-center mr-2 ${message.sender === 'user' ? 'bg-blue-500 ml-2' : 'bg-green-500'}`}
+                      className={`w-8 h-8 rounded-none flex items-center justify-center mr-2 ${message[0] === 'user' ? 'bg-blue-500 ml-2' : 'bg-green-500'}`}
                       animate={{ rotate: [0, 10, -10, 0] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     >
-                      {message.sender === 'user' ? <User size={20} /> : <Bot size={20} />}
+                      {message[0] === 'user' ? <User size={20} /> : <Bot size={20} />}
                     </motion.div>
                     <div
                       className={`px-4 py-2 rounded-none max-w-[70%] ${
-                        message.sender === 'user' 
+                        message[0] === 'user' 
                           ? 'bg-blue-600 text-white border-2 border-blue-300' 
                           : 'bg-gray-800 text-green-400 border-2 border-green-500'
                       }`}
                     >
-                      {message.text}
+                      {message[1]}
                     </div>
                   </div>
                 </motion.div>
@@ -173,7 +171,6 @@ export function AiChat() {
             <div ref={messagesEndRef} />
           </CardContent>
 
-          {/* Rotating star */}
           <motion.div
             className="absolute top-2 right-2 text-yellow-400"
             animate={{ rotate: 360 }}

@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   let objID;
   if (!session) 
   {
-    objID='672e0c1c8293831e6b0d8191';
+    objID=new ObjectId('672e0c1c8293831e6b0d8191');
   }
   else
   {
@@ -22,6 +22,7 @@ export default async function handler(req, res) {
 
 
   const user = await users.findOne({ _id: objID });
+
   console.log(session,user);
   if (req.method === "POST") {
     const message = req.body.message;
