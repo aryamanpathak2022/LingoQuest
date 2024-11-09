@@ -1,6 +1,14 @@
-import Dashboard from "@/hooks/user-dashboard";
+"use client"
+import { UserDashboard } from "@/hooks/user-dashboard";
+import { SessionProvider } from "next-auth/react";
 
-export default function Page() {
-    return <Dashboard />;
-    }
-    
+export default function Home() {
+  return (
+    <SessionProvider>
+      <div>
+      <UserDashboard />
+      </div>
+    </SessionProvider>
+  );
+}
+
