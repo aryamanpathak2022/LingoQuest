@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from 'next/link';
 import { Send, User, Bot, ArrowLeft, Star } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 export function AiChat() {
   const [messages, setMessages] = useState([]);
@@ -35,7 +36,6 @@ export function AiChat() {
   
     fetchHistory();
   }, []);
-  
 
   useEffect(scrollToBottom, [messages]);
 
@@ -69,7 +69,7 @@ export function AiChat() {
       setIsTyping(false);
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-black text-green-500 font-pixel p-4 relative overflow-hidden">
       <style jsx global>{`
@@ -149,7 +149,11 @@ export function AiChat() {
                           : 'bg-gray-800 text-green-400 border-2 border-green-500'
                       }`}
                     >
-                      {message[1]}
+                      {message[0] === 'user' ? (
+                        message[1]
+                      ) : (
+                        <ReactMarkdown>{message[1]}</ReactMarkdown>
+                      )}
                     </div>
                   </div>
                 </motion.div>

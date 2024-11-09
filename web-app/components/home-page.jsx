@@ -9,10 +9,12 @@ import Link from 'next/link'
 import { BookOpen, MessageSquare, Trophy, Globe, Brain, Zap, User } from 'lucide-react'
 import {  useEffect } from 'react'
 import styles from './bg.css';
+import { signOut } from 'next-auth/react';
 
 export function HomePage() {
   const [selectedLanguage, setSelectedLanguage] = useState('english')
   const [pixels, setPixels] = useState([])
+ // Hardcoded streak value for now
 
   useEffect(() => {
     const newPixels = []
@@ -52,13 +54,31 @@ export function HomePage() {
     { id: 5, title: 'Overcoming Language Learning Plateaus', author: 'PersistentPolyglot' },
   ]
 
-  const leaderboard = [
-    { rank: 1, name: 'LanguageLegend', streak: 365, xp: 50000 },
-    { rank: 2, name: 'WordWizard', streak: 280, xp: 45000 },
-    { rank: 3, name: 'GrammarGuru', streak: 200, xp: 40000 },
-    { rank: 4, name: 'VocabViking', streak: 150, xp: 35000 },
-    { rank: 5, name: 'SyntaxSage', streak: 100, xp: 30000 },
-  ]
+ 
+  const [leaderboard, setLeaderboard] = useState([]);
+  const hardcodedStreak = 10; // Hardcoded streak value for now
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/leaderboard');
+      const data = await response.json();
+
+      // Map through fetched data, add streak to each user, and sort by xp
+      const formattedLeaderboard = data.map((user, index) => ({
+        rank: index + 1,
+        name: user.username,
+        xp: user.rating, // Assuming 'rating' is the xp value in your database
+        streak: hardcodedStreak,
+      }));
+
+      setLeaderboard(formattedLeaderboard);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   return (
     (<div className="min-h-screen bg-black text-green-500 font-pixel p-4">
@@ -92,10 +112,11 @@ export function HomePage() {
             </motion.div>
             <Link href="/dashboard" className="text-yellow-500 hover:underline">Profile</Link>
             <Button
-              asChild
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-none">
-              <Link href="/logout">Logout</Link>
-            </Button>
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-none"
+          >
+            Logout
+          </Button>
           </nav>
         </div>
       </header>
@@ -160,64 +181,70 @@ export function HomePage() {
   </div>
 </section>
 
-        <section className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">Latest Blog Posts</h2>
-            <Button
-              asChild
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-none">
-              <Link href="/blogs">See More</Link>
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {blogs.map((blog) => (
-              <Card key={blog.id} className="bg-gray-900 border-green-500 border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-white">
-                    <BookOpen className="mr-2" />
-                    {blog.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white">By: {blog.author}</p>
-                  <Button
-                    asChild
-                    className="mt-4 bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-none">
-                    <Link href={`/blog/${blog.id}`}>Read More</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
+<section className="mb-8">
+<div className="flex justify-between items-center mb-4">
+  <h2 className="text-2xl font-bold">Latest Blog Posts</h2>
+  <Button
+    asChild
+    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-none">
+    <Link href="/blogs">See More</Link>
+  </Button>
+</div>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {blogs.map((blog) => {
+    // Generate URL-safe title
+    const urlTitle = blog.title.toLowerCase().replace(/\s+/g, "-");
+
+    return (
+      <Card key={blog.id} className="bg-gray-900 border-green-500 border-2">
+        <CardHeader>
+          <CardTitle className="flex items-center text-white">
+            <BookOpen className="mr-2" />
+            {blog.title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-white">By: {blog.author}</p>
+          <Button
+            asChild
+            className="mt-4 bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-none">
+            <Link href={`/blogs/${urlTitle}`}>Read More</Link>
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  })}
+</div>
+</section>
+
 
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
-            <Card className="bg-gray-900 border-green-500 border-2">
-              <CardHeader>
-                <CardTitle className="flex items-center text-white">
-                  <Trophy className="mr-2" />
-                  Top Language Learners
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {leaderboard.map((user) => (
-                    <li key={user.rank} className="flex justify-between items-center text-white">
-                      <span>#{user.rank} {user.name}</span>
-                      <span className="text-yellow-500">{user.streak} 🔥 | {user.xp} XP</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  asChild
-                  className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-none">
-                  <Link href="/leaderboard">View Full Leaderboard</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+        <div>
+        <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
+        <Card className="bg-gray-900 border-green-500 border-2">
+          <CardHeader>
+            <CardTitle className="flex items-center text-white">
+              <Trophy className="mr-2" />
+              Top Language Learners
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2">
+              {leaderboard.map((user) => (
+                <li key={user.rank} className="flex justify-between items-center text-white">
+                  <span>#{user.rank} {user.name}</span>
+                  <span className="text-yellow-500">{user.streak} 🔥 | {user.xp} XP</span>
+                </li>
+              ))}
+            </ul>
+            <Button
+              asChild
+              className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-none">
+              <Link href="/leaderboard">View Full Leaderboard</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
           <div>
             <h2 className="text-2xl font-bold mb-4">Quick Actions</h2>
             <div className="grid gap-4">
@@ -232,7 +259,7 @@ export function HomePage() {
               <Button
                 asChild
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-none text-lg">
-                <Link href="/daily-challenge" className="flex items-center justify-center">
+                <Link href="/quiz/potd" className="flex items-center justify-center">
                   <Zap className="mr-2" />
                   Take Daily Challenge
                 </Link>
