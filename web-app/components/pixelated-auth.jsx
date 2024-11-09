@@ -47,7 +47,7 @@ export function PixelatedAuth() {
       email,
       password,
       redirect: false,  // Do not redirect automatically
-      callbackUrl: "/dashboard",  // Redirect to /dashboard after successful login
+      callbackUrl: "/homel",  // Redirect to /dashboard after successful login
     })
 
     if (res?.error) {

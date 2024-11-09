@@ -90,7 +90,7 @@ export function HomePage() {
                 </Link>
               </Button>
             </motion.div>
-            <Link href="/profile" className="text-yellow-500 hover:underline">Profile</Link>
+            <Link href="/dashboard" className="text-yellow-500 hover:underline">Profile</Link>
             <Button
               asChild
               className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-none">

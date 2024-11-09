@@ -58,7 +58,7 @@ export function AiChat() {
         const aiResponse = await response.json();
         setMessages((prev) => [
           ...prev,
-          ['ai', aiResponse.reply]
+          ['ai', aiResponse.message]
         ]);
       } else {
         console.error('Failed to fetch AI response');
@@ -107,7 +107,7 @@ export function AiChat() {
 
       <header className="border-b-4 border-green-500 pb-4 mb-8">
         <div className="container mx-auto flex justify-between items-center">
-          <Link href="/" className="text-3xl font-bold flex items-center">
+          <Link href="/homel" className="text-3xl font-bold flex items-center">
             <ArrowLeft className="mr-2" />
             Back to Home
           </Link>
