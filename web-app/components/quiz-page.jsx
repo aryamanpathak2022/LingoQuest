@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter for redirection
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heart, Star, ArrowRight } from 'lucide-react';
@@ -14,6 +15,7 @@ export function QuizPage({ language = 'English', difficulty = 'easy' }) {
   const [gameOver, setGameOver] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
+  const router = useRouter(); // Initialize router
 
   useEffect(() => {
     const newPixels = [];
@@ -87,17 +89,33 @@ export function QuizPage({ language = 'English', difficulty = 'easy' }) {
         setLives(lives - 1);
       }
 
-      if (lives === 1 && !correct) {
+      if ((lives === 1 && !correct) || currentQuestion === 4) {
         setGameOver(true);
       } else {
-        setCurrentQuestion((prev) => (prev + 1) % questions.length);
+        setCurrentQuestion((prev) => prev + 1);
         setSelectedAnswer(null);
         setIsCorrect(null);
       }
     }, 1000);
   };
 
+  const submitScoreAndRedirect = async () => {
+    try {
+      await fetch('http://localhost:3000/api/scoreSubmit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          corretion:score/10, 
+          difficulty:difficulty }),
+      });
+      router.push('/homel');
+    } catch (error) {
+      console.error('Error submitting score:', error);
+    }
+  };
+
   const resetGame = () => {
+    submitScoreAndRedirect(); // Submit score and redirect before resetting state
     setCurrentQuestion(0);
     setScore(0);
     setLives(3);
@@ -203,7 +221,7 @@ export function QuizPage({ language = 'English', difficulty = 'easy' }) {
                 onClick={resetGame}
                 className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-none"
               >
-                Play Again <ArrowRight className="ml-2" />
+                Go Home <ArrowRight className="ml-2" />
               </Button>
             </CardContent>
           </Card>
