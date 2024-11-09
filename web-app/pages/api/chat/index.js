@@ -57,7 +57,7 @@ export default async function handler(req, res) {
       
           if(result.modifiedCount === 1)
           {
-            res.status(200).json({ message: "Chat History Updated" });
+            res.status(200).json({ message: response.data.response, success: true });
           }
           else
           {

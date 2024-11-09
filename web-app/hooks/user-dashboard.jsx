@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Trophy, Zap, BookOpen, Flame, Star, BarChart } from 'lucide-react'
+import Link from 'next/link'
 
 import styles from '../components/bg.css';
 // use effect
@@ -126,10 +127,12 @@ export function UserDashboard() {
 
         <div className="flex flex-wrap gap-6 mb-8 justify-center">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-1/3 lg:w-1/4">
+          <Link href='/quiz/potd'>
             <Button className="w-full h-32 text-2xl font-bold bg-green-500 hover:bg-green-600 rounded-lg pixel-border pixel-bg">
               <Zap className="w-10 h-10 mr-4" />
               Daily Challenge
             </Button>
+          </Link>
           </motion.div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-1/3 lg:w-1/4">
             <Button className="w-full h-32 text-2xl font-bold bg-blue-500 hover:bg-blue-600 rounded-lg pixel-border pixel-bg">
