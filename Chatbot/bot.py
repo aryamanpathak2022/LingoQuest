@@ -11,7 +11,7 @@ load_dotenv()
 # Authenticate with the OpenAI model using a personal access token
 client = OpenAI(
     base_url="https://models.inference.ai.azure.com",
-    api_key=os.getenv('SECRET_KEY')
+    api_key=os.getenv("OPENAI_API_KEY")
 )
 
 # Chat history will be maintained per request (session state management should be handled by the front-end)

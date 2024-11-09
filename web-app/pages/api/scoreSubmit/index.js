@@ -12,7 +12,9 @@ export default async function handler(req, res) {
   let objID;
   if (!session) 
   {
-    objID='672e0c1c8293831e6b0d8191';
+    objID=new ObjectId('672e0c1c8293831e6b0d8191');
+  
+
   }
   else
   {
