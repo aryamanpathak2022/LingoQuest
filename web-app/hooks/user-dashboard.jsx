@@ -2,23 +2,50 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
+import { useSession } from 'next-auth/react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Trophy, Zap, BookOpen, Flame, Star, BarChart } from 'lucide-react'
-import styles from './dashboard.css'
+
+import styles from '../components/bg.css';
+// use effect
+import { useEffect, useState } from 'react'
+
+
 
 export function UserDashboard() {
-  // This would typically come from a database or API
-  const user = {
-    username: "PixelMaster42",
-    level: 7,
-    xp: 3450,
-    streak: 5
+  const [pixels, setPixels] = useState([])
+  useEffect(() => {
+    const newPixels = []
+    for (let i = 0; i < 100; i++) {
+      newPixels.push(<div
+        key={i}
+        className="pixel"
+        style={{
+          top: `${Math.random() * 100}%`,
+          left: `${Math.random() * 100}%`,
+          animationDelay: `${Math.random() * 5}s`,
+        }} />)
+    }
+    setPixels(newPixels)
+  }, [])
+  const { data: session, status } = useSession()
+
+
+
+  // Default values if not provided in session
+  const userData = {
+    email: session?.user?.email || "User",
+    username: session?.user?.name || "Anonymous",
+    rating: session?.user?.rating || 1000,
+    level: session?.user?.level || 1,
+    xp: session?.user?.rating || 0,
+    streak: session?.user?.streak || 0
   }
 
   return (
-    (<div
-      className="min-h-screen bg-black text-white font-pixel p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-black text-white font-pixel p-4 relative overflow-hidden">
+       {pixels}
       <style jsx global>{`
         @font-face {
           font-family: 'PixelFont';
@@ -49,41 +76,49 @@ export function UserDashboard() {
           background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
         }
       `}</style>
-      <div
-        className="container mx-auto max-w-6xl h-screen flex flex-col justify-between py-8">
+
+      <div className="container mx-auto max-w-6xl h-screen flex flex-col justify-between py-8">
         <header className="text-center mb-8">
           <motion.h1
-            className="text-20xl font-bold mb-4 inline-block pixelated-text" // Increased font size
+            className="text-4xl font-bold mb-4 inline-block pixelated-text"
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 2, repeat: Infinity }}>
             LingoQuest Dashboard
           </motion.h1>
         </header>
 
-        <Card
-          className="bg-gray-900 border-2 border-green-500 pixel-border mb-8 pixel-bg">
+        <Card className="bg-gray-900 border-2 border-green-500 pixel-border mb-8 pixel-bg">
           <CardHeader>
-            <CardTitle className="text-3xl text-center text-green-400 pixelated-text">Welcome, {user.username}!</CardTitle>
+            <CardTitle className="text-3xl text-center text-green-400 pixelated-text">
+              Welcome, {userData.username}!
+            </CardTitle>
+            <p className="text-center text-gray-400 mt-2">{userData.email}</p>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-purple-500 p-6 rounded-lg pixel-border">
+                <Trophy className="w-12 h-12 mx-auto mb-4" />
+                <p className="text-2xl font-bold">Rating: {userData.rating}</p>
+              </motion.div>
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="bg-blue-500 p-6 rounded-lg pixel-border">
-                <Trophy className="w-12 h-12 mx-auto mb-4" />
-                <p className="text-2xl font-bold">Level {user.level}</p>
+                <Star className="w-12 h-12 mx-auto mb-4" />
+                <p className="text-2xl font-bold">Level {userData.level}</p>
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="bg-yellow-500 p-6 rounded-lg pixel-border">
-                <Star className="w-12 h-12 mx-auto mb-4" />
-                <p className="text-2xl font-bold">{user.xp} XP</p>
+                <BarChart className="w-12 h-12 mx-auto mb-4" />
+                <p className="text-2xl font-bold">{userData.xp} XP</p>
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="bg-red-500 p-6 rounded-lg pixel-border">
                 <Flame className="w-12 h-12 mx-auto mb-4" />
-                <p className="text-2xl font-bold">{user.streak} Day Streak</p>
+                <p className="text-2xl font-bold">{userData.streak} Day Streak</p>
               </motion.div>
             </div>
           </CardContent>
@@ -91,33 +126,31 @@ export function UserDashboard() {
 
         <div className="flex flex-wrap gap-6 mb-8 justify-center">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-1/3 lg:w-1/4">
-            <Button
-              className="w-full h-32 text-2xl font-bold bg-green-500 hover:bg-green-600 rounded-lg pixel-border pixel-bg">
+            <Button className="w-full h-32 text-2xl font-bold bg-green-500 hover:bg-green-600 rounded-lg pixel-border pixel-bg">
               <Zap className="w-10 h-10 mr-4" />
               Daily Challenge
             </Button>
           </motion.div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-1/3 lg:w-1/4">
-            <Button
-              className="w-full h-32 text-2xl font-bold bg-blue-500 hover:bg-blue-600 rounded-lg pixel-border pixel-bg">
+            <Button className="w-full h-32 text-2xl font-bold bg-blue-500 hover:bg-blue-600 rounded-lg pixel-border pixel-bg">
               <BookOpen className="w-10 h-10 mr-4" />
               Practice
             </Button>
           </motion.div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-1/3 lg:w-1/4">
-            <Button
-              className="w-full h-32 text-2xl font-bold bg-yellow-500 hover:bg-yellow-600 rounded-lg pixel-border pixel-bg">
+            <Button className="w-full h-32 text-2xl font-bold bg-yellow-500 hover:bg-yellow-600 rounded-lg pixel-border pixel-bg">
               <BarChart className="w-10 h-10 mr-4" />
               Leaderboard
             </Button>
           </motion.div>
         </div>
 
-        <footer
-          className="text-center text-gray-500 pixel-bg p-4 rounded-lg pixel-border">
+        <footer className="text-center text-gray-500 pixel-bg p-4 rounded-lg pixel-border">
           <p>&copy; 2024 LingoQuest. All rights reserved.</p>
         </footer>
       </div>
-    </div>)
-  );
+    </div>
+  )
 }
+
+export default UserDashboard

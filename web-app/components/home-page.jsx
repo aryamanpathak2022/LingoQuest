@@ -7,9 +7,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from 'next/link'
 import { BookOpen, MessageSquare, Trophy, Globe, Brain, Zap, User } from 'lucide-react'
+import {  useEffect } from 'react'
+import styles from './bg.css';
 
 export function HomePage() {
   const [selectedLanguage, setSelectedLanguage] = useState('english')
+  const [pixels, setPixels] = useState([])
+
+  useEffect(() => {
+    const newPixels = []
+    for (let i = 0; i < 100; i++) {
+      newPixels.push(<div
+        key={i}
+        className="pixel"
+        style={{
+          top: `${Math.random() * 100}%`,
+          left: `${Math.random() * 100}%`,
+          animationDelay: `${Math.random() * 5}s`,
+        }} />)
+    }
+    setPixels(newPixels)
+  }, [])
 
   const languages = [
     { value: 'english', label: 'English' },
@@ -44,6 +62,7 @@ export function HomePage() {
 
   return (
     (<div className="min-h-screen bg-black text-green-500 font-pixel p-4">
+      {pixels}
       <style jsx global>{`
         @font-face {
           font-family: 'PixelFont';
