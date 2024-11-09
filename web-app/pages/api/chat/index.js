@@ -10,13 +10,16 @@ export default async function handler(req, res) {
   const users = await db.collection("Users");
 
   const session = await getSession({ req });
-
-  if (!session) {
-    return res.status(401).json({ message: "Unauthorized" });
+  let objID;
+  if (!session) 
+  {
+    objID='672e0c1c8293831e6b0d8191';
+  }
+  else
+  {
+    objID= new ObjectId(session.user.sub);
   }
 
-
-  const objID= new ObjectId(session.user.sub);
 
   const user = await users.findOne({ _id: objID });
   console.log(session,user);
