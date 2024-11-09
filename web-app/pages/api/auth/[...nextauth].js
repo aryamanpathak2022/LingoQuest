@@ -48,6 +48,7 @@ export default NextAuth({
       session.user.sub = token.sub;
       session.user.email = token.email;
       session.user.rating = token.rating;
+      session.user.username = token.username;
       return session;
     },
     async jwt({ token, user }) {
@@ -58,6 +59,7 @@ export default NextAuth({
         const users = await db.collection("Users");
         const userObj = await users.findOne({ _id: user.id });
         token.rating = userObj.rating;
+        token.username = userObj.username;
       }
       return token;
     },
