@@ -76,7 +76,7 @@ Start the server
 
 ## Demo
 
-Insert gif or link to demo
+[Demo](https://youtu.be/j6fEEog2-ME?si=3rPUQ_ripbQt1gzS)
 
 
 ## Authors
