@@ -55,6 +55,7 @@ export default async function handler(req, res) {
 
     if(result.modifiedCount === 1)
     {
+      session.user.rating = rating; 
       res.status(200).json({ message: "Rating Updated" });
     }
     else

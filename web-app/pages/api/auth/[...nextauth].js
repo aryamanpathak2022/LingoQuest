@@ -46,12 +46,20 @@ export default NextAuth({
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.sub = token.sub;
+      session.user.email = token.email;
+      session.user.rating = token.rating;
+      session.user.username = token.username;
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        console.log(token);
+        const client = await clientPromise;
+        const db = client.db("lingoQuest");
+        const users = await db.collection("Users");
+        const userObj = await users.findOne({ _id: user.id });
+        token.rating = userObj.rating;
+        token.username = userObj.username;
       }
       return token;
     },
