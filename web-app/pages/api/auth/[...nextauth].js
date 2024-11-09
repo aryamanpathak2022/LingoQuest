@@ -3,8 +3,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
+import { ObjectId } from "mongodb";
 
-export default NextAuth({
+export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialsProvider({
@@ -26,7 +27,7 @@ export default NextAuth({
           return null;
         }
 
-        return { id: user._id, email: user.email };
+        return { id: user._id.toString(), email: user.email }; // Ensure `id` is a string
       },
     }),
   ],
@@ -44,22 +45,30 @@ export default NextAuth({
   },
   callbacks: {
     async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.sub = token.sub;
-      session.user.email = token.email;
-      session.user.rating = token.rating;
-      session.user.username = token.username;
+      // Add properties from token to session for easier access in other APIs
+      if (token) {
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.rating = token.rating;
+        session.user.username = token.username;
+      }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.email = user.email;
+        
+        // Fetch user data from database to add to token
         const client = await clientPromise;
         const db = client.db("lingoQuest");
-        const users = await db.collection("Users");
-        const userObj = await users.findOne({ _id: user.id });
-        token.rating = userObj.rating;
-        token.username = userObj.username;
+        const usersCollection = db.collection("Users");
+        const userObj = await usersCollection.findOne({ _id: new ObjectId(user.id) });
+        
+        if (userObj) {
+          token.rating = userObj.rating;
+          token.username = userObj.username;
+        }
       }
       return token;
     },
@@ -72,4 +81,6 @@ export default NextAuth({
       }
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

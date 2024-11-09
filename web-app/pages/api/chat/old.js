@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   }
 
 
-  const objID= new ObjectId(session.user.sub);
+  const objID= new ObjectId(session.user.id);
 
   const user = await users.findOne({ _id: objID });
   console.log(session,user);

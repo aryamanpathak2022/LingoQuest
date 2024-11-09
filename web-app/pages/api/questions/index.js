@@ -15,15 +15,22 @@ export default async function handler(req, res) {
     if (difficulty) query.difficulty = difficulty;
     if (difficulty === "potd")
     {
-      const questions = await db.collection("Quizzes").find().toArray();
+      let questions = await db.collection("Quizzes").find().toArray();
+      
       let idx=Math.floor(Math.random() *( questions.length));
       let idx1=Math.floor(Math.random() *( questions[idx].questions.length));
-      res.status(200).json(questions[idx].questions[idx1]);
+      console.log(questions[idx].questions[idx1]);  
+      res.status(200).json([{questions:[questions[idx].questions[idx1]]}]);
     }
-    console.log(query);
-    // Fetch filtered questions from the database
-    const questions = await db.collection("Quizzes").find(query).toArray();
-    res.status(200).json(questions);
+    else
+    {
+      console.log("hwerfuihfwdihjfihjfih");
+      // Fetch filtered questions from the database
+      const questions = await db.collection("Quizzes").find(query).toArray();
+      console.log(questions);
+      res.status(200).json(questions);
+
+    }
   } else {
     res.setHeader("Allow", ["GET"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);

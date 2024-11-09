@@ -52,10 +52,13 @@ export function QuizPage({ language = 'English', difficulty = 'easy' }) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        console.log('Response:', response);
         const result = await response.json();
         const questions = result[0].questions;
-
+        console.log('Questions:', questions);
+        console.log('Result:', result);
         if (Array.isArray(result)) {
+          console.log('Questions:', questions);
           const formattedQuestions = questions.map((question) => ({
             question_id: question.question_id,
             text: question.text,
@@ -89,7 +92,7 @@ export function QuizPage({ language = 'English', difficulty = 'easy' }) {
         setLives(lives - 1);
       }
 
-      if ((lives === 1 && !correct) || currentQuestion === 4) {
+      if ((lives === 1 && !correct) || currentQuestion === 4 || difficulty=='potd') {
         setGameOver(true);
       } else {
         setCurrentQuestion((prev) => prev + 1);
@@ -105,7 +108,7 @@ export function QuizPage({ language = 'English', difficulty = 'easy' }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          corretion:score/10, 
+          correction:score/10, 
           difficulty:difficulty }),
       });
       router.push('/homel');
