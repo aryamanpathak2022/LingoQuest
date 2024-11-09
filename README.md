@@ -20,7 +20,8 @@ LingoQuest is an interactive web application designed to make language learning 
 ![image](https://github.com/user-attachments/assets/9f0a4b40-3d55-43be-b6f5-d09b5e9dcd05)
 ![image](https://github.com/user-attachments/assets/9d66e985-2e86-4396-9c17-abb34de9e42b)
 
-
+## Work flow Diagram
+![workflow](https://github.com/user-attachments/assets/b43dffbb-bee8-4d40-bd4d-e055235ee214)
 
 
 ## Tech Stack
