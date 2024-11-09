@@ -1,6 +1,6 @@
-import Dashboard from "@/hooks/user-dashboard";
+import { UserDashboard } from "@/hooks/user-dashboard";
 
 export default function Page() {
-    return <Dashboard />;
+    return <UserDashboard />;
     }
     
