@@ -25,26 +25,29 @@ export default async function handler(req, res) {
     let rating = user.rating;
     const diff = req.body.difficulty;
     const correction = req.body.correction;
-    // const { diff, correction } = req.query;
+    
 
-    if(diff==1)
+    if(diff=="easy")
     {
         console.log("here");
         rating = rating + correction*10  - (5-correction)*5;
     }
-    else if(diff==2)
+    else if(diff=="medium")
     {
         rating = rating + correction*20  - (5-correction)*5;
     }
-    else if(diff==3)
+    else if(diff=="hard")
     {
         rating = rating + correction*30  - (5-correction)*5;
     }
-    else
+    else if(diff=="advance")
     {
         rating = rating + correction*40  - (5-correction)*5;
     }
-
+    else if (diff == "potd")
+    {
+        rating = rating + correction*50;
+    }
     rating = Math.max(0,rating);
 
     const result = await users.updateOne(

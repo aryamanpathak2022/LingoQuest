@@ -13,7 +13,13 @@ export default async function handler(req, res) {
     const query = {};
     if (language) query.language = language;
     if (difficulty) query.difficulty = difficulty;
-
+    if (difficulty === "potd")
+    {
+      const questions = await db.collection("Quizzes").find().toArray();
+      let idx=Math.floor(Math.random() *( questions.length));
+      let idx1=Math.floor(Math.random() *( questions[idx].questions.length));
+      res.status(200).json(questions[idx].questions[idx1]);
+    }
     console.log(query);
     // Fetch filtered questions from the database
     const questions = await db.collection("Quizzes").find(query).toArray();
