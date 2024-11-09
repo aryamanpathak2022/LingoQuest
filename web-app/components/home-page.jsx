@@ -80,7 +80,7 @@ export function HomePage() {
               <Button
                 asChild
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-none">
-                <Link href="/ai-chat" className="flex items-center">
+                <Link href="/chat" className="flex items-center">
                   <motion.div
                     animate={{ rotate: [0, 10, -10, 0] }}
                     transition={{ repeat: Infinity, duration: 2 }}>
@@ -130,35 +130,35 @@ export function HomePage() {
         </section>
 
         <section>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">Available Quizzes</h2>
-            <Button
-              asChild
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-none">
-              <Link href="/quizzes">See More</Link>
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {quizzes.map((quiz) => (
-              <Card key={quiz.id} className="bg-gray-900 border-green-500 border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-white">
-                    <Brain className="mr-2" />
-                    {quiz.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white">Difficulty: {quiz.difficulty}</p>
-                  <Button
-                    asChild
-                    className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-none">
-                    <Link href={`/quiz/${quiz.id}`}>Start Quiz</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-2xl font-bold">Available Quizzes</h2>
+    <Button
+      asChild
+      className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-none">
+      <Link href="/quizzes">See More</Link>
+    </Button>
+  </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    {quizzes.map((quiz) => (
+      <Card key={quiz.id} className="bg-gray-900 border-green-500 border-2">
+        <CardHeader>
+          <CardTitle className="flex items-center text-white">
+            <Brain className="mr-2" />
+            {quiz.title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-white">Difficulty: {quiz.difficulty}</p>
+          <Button
+            asChild
+            className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-none">
+            <Link href={`/quiz/${quiz.difficulty.toLowerCase()}`}>Start Quiz</Link>
+          </Button>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+</section>
 
         <section className="mb-8">
           <div className="flex justify-between items-center mb-4">
@@ -224,7 +224,7 @@ export function HomePage() {
               <Button
                 asChild
                 className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-6 rounded-none text-lg">
-                <Link href="/ai-chat" className="flex items-center justify-center">
+                <Link href="/chat" className="flex items-center justify-center">
                   <MessageSquare className="mr-2" />
                   Start AI Chat Session
                 </Link>
