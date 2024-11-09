@@ -23,20 +23,26 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     const message = req.body.message;
     let chatHistory = user.chatHistory;
+    console.log(chatHistory);
     let chatList = []; 
     chatHistory.forEach(item => {
-        chatList.push({"role":"user","content":item});
+        chatList.push({"role":item[0],"content":item[1]});
     });
 
-    // console.log(chatList,message);
+    console.log(chatList,message);
 
     try {
         const response = await axios.post('http://localhost:8000/chat', {
           message,
           chat_history: chatList
         });
+        // console.log(response.data.chat_history);
 
-        chatHistory.push(response.data.response);
+        const chat_History = response.data.chat_history;
+        chatHistory = [];
+        chat_History.forEach(item => {
+            chatHistory.push([item.role,item.content]);
+        });
 
         const result = await users.updateOne(
             { _id: objID },
